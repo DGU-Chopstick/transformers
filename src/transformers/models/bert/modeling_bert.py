@@ -1849,6 +1849,7 @@ class BertForTokenClassification(BertPreTrainedModel):  # a.k.a NER. BertPreTrai
         super().__init__(config)  # PreTrainedModel class의 from_pretrained() method가 호출됨.
         # C:\Users\hello.glen.FASOOCOM\AppData\Roaming\Python\Python310\site-packages\transformers\modeling_utils.py에 있음.
         self.num_labels = config.num_labels
+        print("test2, self.num_labes in modeling_bert.py", self.num_labels)
         r"""
         BertForSequenceClassification와는 다르게 self.config = config 구문이 없음...
         """
@@ -1860,9 +1861,10 @@ class BertForTokenClassification(BertPreTrainedModel):  # a.k.a NER. BertPreTrai
             else config.hidden_dropout_prob
         )  # config.classifier_dropout이 None이면 config.hidden_dropout_prob를 가져옴.
         self.dropout = nn.Dropout(classifier_dropout)
+        self.dropout2 = nn.Dropout(classifier_dropout)
         self.classifier = nn.Linear(config.hidden_size, config.num_labels)
         self.classifier2 = nn.Linear(
-            config.num_labels, config.num_labels / 10
+            config.hidden_size, config.num_labels
         )  # 내가추가한코드. Linear Layer 2.
         # self.config = config  # 내가만든코드
         # Initialize weights and apply final processing
@@ -1919,6 +1921,7 @@ class BertForTokenClassification(BertPreTrainedModel):  # a.k.a NER. BertPreTrai
         sequence_output = self.dropout(sequence_output)
         logits = self.classifier(sequence_output)
         logits2 = self.classifier2(sequence_output)  # 내가짠코드.
+        # logits2 = self.classifier2(logits)  # 내가짠코드.
 
         loss = None
         if labels is not None:
@@ -1931,12 +1934,15 @@ class BertForTokenClassification(BertPreTrainedModel):  # a.k.a NER. BertPreTrai
 
         if not return_dict:
             output = (logits,) + outputs[2:]  # 원본코드.
+            print("glen")
+            print("loss : ", (loss,))  # 내가짠코드.
+            print("output : ", output)  # 내가짠코드.
             # output = (logits,) + outputs[2:] + (logits2,) + outputs[2:]  # 내가짠코드.
             return ((loss,) + output) if loss is not None else output
 
         return TokenClassifierOutput(
             # loss=loss,#원본코드.
-            loss=loss,  # 내가짠코드.
+            loss=loss2,  # 내가짠코드.
             logits=logits,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,

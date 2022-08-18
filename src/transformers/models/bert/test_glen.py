@@ -25,9 +25,16 @@ predicted_token_class_ids = logits.argmax(-1)
 predicted_tokens_classes = [model.config.id2label[t.item()] for t in predicted_token_class_ids[0]]
 # predicted_tokens_classes
 # ['O', 'I-ORG', 'I-ORG', 'I-ORG', 'O', 'O', 'O', 'O', 'O', 'I-LOC', 'O', 'I-LOC', 'I-LOC']
-print(predicted_tokens_classes)
-print(model.config)
+# print(predicted_tokens_classes)
+# print(model.config)
+print(model)
+# print("model")
+# modeldata=model
+# print(modeldata)
+# print("model(**inputs)")
+# modelwithargumentdata=model(**inputs)
+# print(modelwithargumentdata)
 
-labels = predicted_token_class_ids
-loss = model(**inputs, labels=labels).loss
-print(round(loss.item(), 2))
+# labels = predicted_token_class_ids
+# loss = model(**inputs, labels=labels).loss
+# print(round(loss.item(), 2))
